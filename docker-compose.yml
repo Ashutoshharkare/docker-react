@@ -1,0 +1,23 @@
+version: '3'
+services:
+  web:
+    build: 
+      # From where all files are present
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - /app/node_modules
+      - .:/app
+  # Service / container for running live tests (considering docker volumes).
+  # We don't need any port mapping here as it is not hosted on any dev server on any port.
+  test:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - /app/node_modules
+      - .:/app
+    # Overridding default command which is written in Dockerfile.
+    command: ["npm", "run", "test"]
